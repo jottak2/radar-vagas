@@ -1,7 +1,7 @@
 /* Gerado automaticamente por scripts/gerar_vagas.py. Não edite à mão. */
 window.VAGAS_DATA = {
-  "atualizadoEm": "2026-11-23T19:14:39-03:00",
-  "planilhaUrl": "https://docs.google.com/spreadsheets/d/1C_Mjtp4QYcBdvr-OTHzpqU_Hpg6cFzUQfDLW3L6mz4E/edit",
+  "atualizadoEm": "2026-11-23T19:15:11-03:00",
+  "planilhaUrl": "https://claude.ai/artifact/SMu9EpjfEewV5nqZhCjUuo",
   "vagas": [
     {
       "vaga": "Diretor de Arte Jr.",

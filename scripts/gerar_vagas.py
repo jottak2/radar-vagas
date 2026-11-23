@@ -17,7 +17,7 @@ import re
 import sys
 from datetime import datetime, timezone, timedelta
 
-PLANILHA_URL = "https://docs.google.com/spreadsheets/d/1C_Mjtp4QYcBdvr-OTHzpqU_Hpg6cFzUQfDLW3L6mz4E/edit"
+PLANILHA_URL = "https://claude.ai/artifact/SMu9EpjfEewV5nqZhCjUuo"
 TZ_SP = timezone(timedelta(hours=-3))
 
 
