@@ -155,15 +155,15 @@
       var b = ease(clamp((p - 0.45) / 0.45)); // fase 2: vai para o segundo plano
       if (p < 0.45) {
         foto.style.zIndex = 2;
-        foto.style.opacity = 0.25 + 0.75 * a;
-        foto.style.transform = "translateX(" + (70 * (1 - a)) + "%) scale(" + (1.18 - 0.18 * a) + ")";
+        foto.style.opacity = a;
+        foto.style.transform = "translateX(" + (60 * (1 - a)) + "%) scale(" + (1.08 - 0.08 * a) + ")";
         foto.style.filter = "none";
         txt.style.opacity = 1 - a;
         txt.style.transform = "translateY(" + (-30 * a) + "px)";
       } else {
         foto.style.zIndex = 0;
-        foto.style.opacity = 1 - 0.62 * b;
-        foto.style.transform = "translateY(" + (6 * b) + "%) scale(" + (1 - 0.16 * b) + ")";
+        foto.style.opacity = 1 - 0.55 * b;
+        foto.style.transform = "translateY(" + (4 * b) + "%) scale(" + (1 - 0.22 * b) + ")";
         foto.style.filter = "blur(" + (5 * b) + "px) brightness(" + (1 - 0.5 * b) + ")";
         txt.style.opacity = b;
         txt.style.transform = "translateY(" + (30 * (1 - b)) + "px)";
