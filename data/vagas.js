@@ -1,6 +1,6 @@
 /* Gerado automaticamente por scripts/gerar_vagas.py. Não edite à mão. */
 window.VAGAS_DATA = {
-  "atualizadoEm": "2026-11-23T17:20:13-03:00",
+  "atualizadoEm": "2026-11-23T19:01:49-03:00",
   "planilhaUrl": "https://claude.ai/artifact/SMu9EpjfEewV5nqZhCjUuo",
   "vagas": [
     {
