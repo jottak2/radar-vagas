@@ -141,6 +141,43 @@
   $("busca").addEventListener("input", function (e) { termo = e.target.value; render(); });
   render();
 
+  // ---- paralaxe da capa ----
+  (function () {
+    var hero = $("hero"), foto = $("hero-photo"), txt = document.querySelector(".hero-inner"), hint = $("scroll-hint");
+    if (!hero || !foto) return;
+    var reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var clamp = function (x) { return Math.max(0, Math.min(1, x)); };
+    var ease = function (x) { return 1 - Math.pow(1 - x, 3); };
+    function quadro() {
+      var total = hero.offsetHeight - window.innerHeight;
+      var p = reduz ? 1 : clamp(-hero.getBoundingClientRect().top / (total || 1));
+      var a = ease(clamp(p / 0.45));          // fase 1: o personagem chega
+      var b = ease(clamp((p - 0.45) / 0.45)); // fase 2: vai para o segundo plano
+      if (p < 0.45) {
+        foto.style.zIndex = 2;
+        foto.style.opacity = 0.25 + 0.75 * a;
+        foto.style.transform = "translateX(" + (70 * (1 - a)) + "%) scale(" + (1.18 - 0.18 * a) + ")";
+        foto.style.filter = "none";
+        txt.style.opacity = 1 - a;
+        txt.style.transform = "translateY(" + (-30 * a) + "px)";
+      } else {
+        foto.style.zIndex = 0;
+        foto.style.opacity = 1 - 0.62 * b;
+        foto.style.transform = "translateY(" + (6 * b) + "%) scale(" + (1 - 0.16 * b) + ")";
+        foto.style.filter = "blur(" + (5 * b) + "px) brightness(" + (1 - 0.5 * b) + ")";
+        txt.style.opacity = b;
+        txt.style.transform = "translateY(" + (30 * (1 - b)) + "px)";
+      }
+      if (hint) hint.style.opacity = p > 0.05 ? 0 : 1;
+    }
+    var pedido = false;
+    window.addEventListener("scroll", function () {
+      if (!pedido) { pedido = true; requestAnimationFrame(function () { quadro(); pedido = false; }); }
+    }, { passive: true });
+    window.addEventListener("resize", quadro);
+    quadro();
+  })();
+
   // ---- entrada suave ----
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (ents) {
