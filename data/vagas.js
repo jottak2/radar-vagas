@@ -1,6 +1,6 @@
 /* Gerado automaticamente por scripts/gerar_vagas.py. Não edite à mão. */
 window.VAGAS_DATA = {
-  "atualizadoEm": "2026-11-23T19:09:02-03:00",
+  "atualizadoEm": "2026-11-23T19:14:39-03:00",
   "planilhaUrl": "https://docs.google.com/spreadsheets/d/1C_Mjtp4QYcBdvr-OTHzpqU_Hpg6cFzUQfDLW3L6mz4E/edit",
   "vagas": [
     {

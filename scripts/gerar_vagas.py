@@ -10,7 +10,9 @@ com o objeto "rows" (linhas numeradas) dentro de "value" ou na raiz.
 A primeira linha é o cabeçalho:
 Vaga | Empresa | Local e modalidade | Aderência | Status | Link | Observações | Tipo | Publicada em
 """
+import csv
 import json
+import os
 import re
 import sys
 from datetime import datetime, timezone, timedelta
@@ -98,7 +100,16 @@ def main():
         f.write("window.VAGAS_DATA = ")
         json.dump(dados, f, ensure_ascii=False, indent=2)
         f.write(";\n")
-    print(f"{len(vagas)} vagas gravadas em {destino} ({agora})")
+    # mesma lista em CSV, na mesma ordem da planilha, para o Google Sheets importar (=IMPORTDATA)
+    csv_path = os.path.join(os.path.dirname(destino) or ".", "vagas.csv")
+    with open(csv_path, "w", encoding="utf-8", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["Vaga", "Empresa", "Local e modalidade", "Aderência", "Status", "Link", "Observações", "Tipo", "Publicada em"])
+        for v in vagas:
+            d = v["publicada"]
+            w.writerow([v["vaga"], v["empresa"], v["local"], v["aderencia"], v["status"], v["link"], v["obs"], v["tipo"],
+                        f"{d[8:10]}/{d[5:7]}/{d[0:4]}" if d else ""])
+    print(f"{len(vagas)} vagas gravadas em {destino} e {csv_path} ({agora})")
 
 
 if __name__ == "__main__":
