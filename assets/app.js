@@ -73,18 +73,18 @@
   $("bar-wrap").setAttribute("aria-label", pct + "% das vagas já salvas ou candidatadas");
   requestAnimationFrame(function () { setTimeout(function () { $("bar").style.width = pct + "%"; }, 300); });
 
-  // ---- destaques ----
+  // ---- destaques (cards do carrossel dentro do cartão) ----
   var top = vagas.filter(function (v) { return v.aderencia === "Alta"; }).slice(0, 8);
-  $("top-list").innerHTML = top.length ? top.map(function (v, i) {
+  $("carrossel-trilho").innerHTML = top.map(function (v, i) {
     var url = safeUrl(v.link);
-    return '<li class="top-item reveal">' +
+    return '<article class="vcard">' +
       '<span class="top-n">.' + String(i + 1).padStart(2, "0") + "</span>" +
-      '<div class="top-body"><h3>' + esc(v.vaga) + "</h3>" +
+      "<h3>" + esc(v.vaga) + "</h3>" +
       '<p class="meta">' + esc(v.empresa) + " · " + esc(v.local) + (v.publicada ? " · " + ddmm(v.publicada) : "") + "</p>" +
-      (v.obs ? '<p class="obs">' + esc(v.obs) + "</p>" : "") + "</div>" +
+      (v.obs ? '<p class="obs">' + esc(v.obs) + "</p>" : '<p class="obs"></p>') +
       (url ? '<a class="pill-cta" href="' + esc(url) + '" target="_blank" rel="noopener">Abrir vaga ↗</a>' : "") +
-      "</li>";
-  }).join("") : '<li class="top-item">Nenhuma vaga de alta aderência hoje.</li>';
+      "</article>";
+  }).join("");
 
   // ---- grade com filtros ----
   var filtro = "todas";
@@ -191,11 +191,12 @@
     rodando = true; quadro();
   })();
 
-  // ---- zíper: fecha, abre, personagem entrega o painel ----
+  // ---- zíper abre, o rapaz estica a mão, o cartão sai dela e as vagas passam ----
   (function () {
     var sec = $("zip"); if (!sec) return;
     var aberto = $("zip-aberto"), fechado = $("zip-fechado"), cima = $("zip-cima"), baixo = $("zip-baixo");
-    var painel = $("painel"), lista = $("painel-lista");
+    var azul = $("fundo-azul"), cartao = $("cartao"), conteudo = $("cartao-conteudo");
+    var trilho = $("carrossel-trilho"), cards = [].slice.call(trilho.children);
     var reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var clamp = function (x) { return Math.max(0, Math.min(1, x)); };
     var ease = function (x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
@@ -203,31 +204,55 @@
     var pedido = false;
     function quadro() {
       pedido = false;
-      var total = sec.offsetHeight - window.innerHeight;
+      var vw = window.innerWidth, vh = window.innerHeight;
+      var total = sec.offsetHeight - vh;
       var p = reduz ? 1 : clamp(-sec.getBoundingClientRect().top / (total || 1));
-      var fecha = fase(p, 0, .16);   // zíper "fechando": aproxima
-      var abre = fase(p, .16, .48);  // zíper abre e revela o personagem
-      var mao = fase(p, .44, .6);    // personagem estica a mão
-      var card = fase(p, .56, .72);  // painel sai da mão
-      var rola = clamp((p - .74) / .26); // informações rolam dentro do painel
+      var fecha = fase(p, 0, .08);
+      var abre  = fase(p, .08, .3);    // zíper abre
+      var mao   = fase(p, .28, .38);   // rapaz estica a mão
+      var sai   = fase(p, .36, .48);   // cartão inclinado sai da mão
+      var toma  = fase(p, .48, .58);   // cartão endireita e toma a tela
+      var anda  = clamp((p - .6) / .38); // vagas passam da direita para a esquerda
 
-      var zoom = 1.25 - .25 * fecha;
-      var sep = abre * 55; // vh
-      fechado.style.transform = "scale(" + zoom + ")";
+      // zíper
+      fechado.style.transform = "scale(" + (1.25 - .25 * fecha) + ")";
       fechado.style.filter = "blur(" + (abre * 6) + "px) brightness(" + (1 - abre * .4) + ")";
-      cima.style.transform = "translateY(" + (-sep) + "vh)";
-      baixo.style.transform = "translateY(" + sep + "vh)";
-
+      cima.style.transform = "translateY(" + (-abre * 55) + "vh)";
+      baixo.style.transform = "translateY(" + (abre * 55) + "vh)";
       aberto.style.setProperty("--rx", (abre * 95) + "%");
       aberto.style.setProperty("--ry", (abre * 80) + "%");
-      aberto.style.transform = "scale(" + (1.18 - .18 * abre + .08 * mao) + ")";
-      aberto.style.filter = "blur(" + ((1 - abre) * 10 + card * 5) + "px) brightness(" + (1 - card * .35) + ")";
+      aberto.style.transform = "scale(" + (1.18 - .18 * abre + .1 * mao) + ")";
+      aberto.style.filter = "blur(" + ((1 - abre) * 10 + sai * 6) + "px)";
 
-      painel.style.opacity = card;
-      painel.style.transform = "translate(-50%, -50%) translate(" + ((1 - card) * 18) + "vw, " + ((1 - card) * 4) + "vh) scale(" + (.1 + .9 * card) + ")";
-      painel.style.pointerEvents = card > .9 ? "auto" : "none";
-      var falta = Math.max(0, lista.scrollHeight - lista.parentElement.clientHeight);
-      lista.style.transform = "translateY(" + (-falta * rola) + "px)";
+      // fundo azul entra atrás do cartão, como na referência
+      azul.style.opacity = sai;
+
+      // cartão: pequeno e inclinado na mão → grande inclinado → reto em tela cheia
+      var w0 = .08, w1 = .8, h1 = .78;
+      var sx = sai < 1 ? (w0 + (w1 - w0) * sai) : (w1 + (1 - w1) * toma);
+      var sy = sai < 1 ? (w0 + (h1 - w0) * sai) : (h1 + (1 - h1) * toma);
+      var rot = sai < 1 ? (-12 + 9 * sai) : (-3 + 3 * toma);
+      var dx = (1 - sai) * vw * .15, dy = (1 - sai) * vh * .06; // começa sobre a mão
+      cartao.style.opacity = clamp(sai * 3);
+      cartao.style.width = (sx * 100) + "vw";
+      cartao.style.height = (sy * 100) + "vh";
+      cartao.style.borderRadius = ((1 - toma) * 6) + "px";
+      cartao.style.transform = "translate(-50%, -50%) translate(" + dx + "px," + dy + "px) rotate(" + rot + "deg)";
+      conteudo.style.opacity = toma;
+      conteudo.style.width = vw + "px"; conteudo.style.height = vh + "px";
+      conteudo.style.left = (-(1 - sx) * vw / 2) + "px"; conteudo.style.top = (-(1 - sy) * vh / 2) + "px";
+
+      // carrossel: anda da direita para a esquerda, com curva
+      var larguraTrilho = trilho.scrollWidth - vw;
+      trilho.style.transform = "translateX(" + (-larguraTrilho * anda) + "px)";
+      var meio = vw / 2;
+      cards.forEach(function (c) {
+        var r = c.getBoundingClientRect();
+        var d = (r.left + r.width / 2 - meio) / meio; // -1 (esq) .. 1 (dir)
+        var dd = Math.max(-1.4, Math.min(1.4, d));
+        c.style.transform = "rotateY(" + (-dd * 16) + "deg) translateZ(" + (-Math.abs(dd) * 60) + "px)";
+      });
+      cartao.style.pointerEvents = toma > .95 ? "auto" : "none";
     }
     window.addEventListener("scroll", function () { if (!pedido) { pedido = true; requestAnimationFrame(quadro); } }, { passive: true });
     window.addEventListener("resize", quadro);
