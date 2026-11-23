@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Radar de Vagas · Jottak2</title>
+  <meta name="description" content="Painel pessoal de vagas de Diretor de Arte Jr e Designer Gráfico, atualizado todo dia.">
+  <link rel="preconnect" href="https://api.fontshare.com">
+  <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+  <header class="nav">
+    <a class="brand" href="#topo" aria-label="Início">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="7" cy="7" r="3.2"/><circle cx="17" cy="7" r="2.2"/><circle cx="7" cy="17" r="2.2"/><circle cx="17" cy="17" r="3.2"/></svg>
+      Jottak2
+    </a>
+    <span class="nav-status"><i class="dot"></i>BUSCA ATIVA · <b id="nav-data">—</b></span>
+    <nav class="nav-links">
+      <a href="https://portfolio-jotta-omega.vercel.app/" target="_blank" rel="noopener">Portfólio</a>
+      <a href="https://www.linkedin.com/in/jottak2/" target="_blank" rel="noopener">LinkedIn</a>
+    </nav>
+  </header>
+
+  <main id="topo">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-grid" aria-hidden="true"></div>
+      <div class="hero-fog" aria-hidden="true"></div>
+      <div class="hero-arc" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <p class="kicker">Radar diário · Vagas + publicações do LinkedIn</p>
+        <h1>Diretor de Arte Jr e Designer Gráfico. <span class="nowrap">Todas as vagas</span> num só lugar.</h1>
+
+        <ul class="chips" id="chips"></ul>
+
+        <div class="offer">
+          <div class="offer-price">
+            <span class="offer-de" id="offer-de">—</span>
+            <strong id="offer-num">—</strong>
+            <span class="offer-sub" id="offer-sub">—</span>
+          </div>
+          <div class="offer-cta">
+            <a class="btn btn-grad" id="cta-planilha" href="#" target="_blank" rel="noopener">Abrir planilha <span aria-hidden="true">↗</span></a>
+            <div class="bar" role="img" id="bar-wrap" aria-label="Progresso das candidaturas"><span id="bar"></span></div>
+            <p class="bar-label" id="bar-label">—</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <section class="marquee" aria-hidden="true">
+      <div class="marquee-row">
+        <div class="marquee-track">
+          <span>Diretor de Arte Jr</span><span class="dim">Designer Gráfico</span><span>Key Visual</span><span class="dim">Campanhas 360°</span><span>IA generativa</span><span class="dim">Retoque high-end</span>
+          <span>Diretor de Arte Jr</span><span class="dim">Designer Gráfico</span><span>Key Visual</span><span class="dim">Campanhas 360°</span><span>IA generativa</span><span class="dim">Retoque high-end</span>
+        </div>
+      </div>
+      <div class="marquee-row reverse">
+        <div class="marquee-track">
+          <span class="dim">São Paulo · presencial</span><span>São Paulo · híbrido</span><span class="dim">Home office</span><span>Remoto em todo o Brasil</span><span class="dim">Júnior · Pleno · Sênior</span><span>Atualizado todo dia às 9h</span>
+          <span class="dim">São Paulo · presencial</span><span>São Paulo · híbrido</span><span class="dim">Home office</span><span>Remoto em todo o Brasil</span><span class="dim">Júnior · Pleno · Sênior</span><span>Atualizado todo dia às 9h</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- DESTAQUES -->
+    <section class="section destaques" id="destaques">
+      <header class="section-head">
+        <p class="kicker">Alta aderência ao seu perfil</p>
+        <h2>As vagas que mais combinam com o seu portfólio.</h2>
+      </header>
+      <ol class="top-list" id="top-list"></ol>
+    </section>
+
+    <!-- TODAS -->
+    <section class="section todas" id="vagas">
+      <header class="section-head row">
+        <div>
+          <p class="kicker">Todas as vagas</p>
+          <h2>Filtre, abra e candidate-se.</h2>
+        </div>
+        <label class="search">
+          <span class="sr-only">Buscar vaga ou empresa</span>
+          <input type="search" id="busca" placeholder="Buscar vaga ou empresa" autocomplete="off">
+        </label>
+      </header>
+
+      <div class="filters" role="group" aria-label="Filtros">
+        <button class="filter is-on" data-f="todas">Todas</button>
+        <button class="filter" data-f="novas">Novas</button>
+        <button class="filter" data-f="alta">Alta aderência</button>
+        <button class="filter" data-f="da">Diretor de Arte</button>
+        <button class="filter" data-f="designer">Designer</button>
+        <button class="filter" data-f="sp">São Paulo</button>
+        <button class="filter" data-f="remoto">Remoto</button>
+        <button class="filter" data-f="pendentes">A candidatar</button>
+      </div>
+
+      <p class="count" id="count" aria-live="polite"></p>
+      <div class="grid" id="grid"></div>
+    </section>
+
+    <!-- COMO FUNCIONA -->
+    <section class="como">
+      <div class="como-inner">
+        <p class="kicker light">Como o radar funciona</p>
+        <h2>Todo dia, antes das 9h, a busca roda sozinha.</h2>
+        <div class="steps">
+          <div class="step"><span class="step-n">.01</span><h3>Busca</h3><p>Vagas e publicações do LinkedIn das últimas 24 horas.</p></div>
+          <div class="step"><span class="step-n">.02</span><h3>Filtra</h3><p>Diretor de Arte Jr e Designer Gráfico júnior, pleno e sênior. SP em qualquer modalidade, fora de SP só remoto.</p></div>
+          <div class="step"><span class="step-n">.03</span><h3>Organiza</h3><p>As novas entram na planilha com aderência, observações e status.</p></div>
+          <div class="step"><span class="step-n">.04</span><h3>Publica</h3><p>Esta página é atualizada e o resumo chega no seu e-mail.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="final">
+      <h2>A planilha completa, com status e anotações.</h2>
+      <p>Marque o que já se candidatou, as entrevistas e os retornos. A página lê o que estiver lá na próxima atualização.</p>
+      <a class="btn btn-dark" id="cta-planilha-2" href="#" target="_blank" rel="noopener">Abrir planilha <span aria-hidden="true">↗</span></a>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <span>Radar de Vagas · Jottak2</span>
+    <span id="foot-data">—</span>
+    <span>Fonte: LinkedIn</span>
+  </footer>
+
+  <script src="data/vagas.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
