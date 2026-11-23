@@ -163,10 +163,10 @@
       var b = ease(clamp((p - 0.45) / 0.45)); // fase 2: vai para o segundo plano
       var blurBase, brilho;
       if (p < 0.45) {
-        foto.style.zIndex = 2;
-        foto.style.opacity = a;
-        foto.style.transform = "translateX(" + (60 * (1 - a)) + "%) scale(" + (1.08 - 0.08 * a) + ")";
-        blurBase = 14 * (1 - a); brilho = 1;
+        foto.style.zIndex = a > 0.35 ? 2 : 0; // atrás do texto no início, na frente quando chega
+        foto.style.opacity = 0.45 + 0.55 * a;
+        foto.style.transform = "translateX(" + (38 * (1 - a)) + "%) scale(" + (1.08 - 0.08 * a) + ")";
+        blurBase = 6 * (1 - a); brilho = 0.55 + 0.45 * a;
         txt.style.opacity = 1 - a;
         txt.style.filter = "blur(" + (8 * a) + "px)";
         txt.style.transform = "translateY(" + (-30 * a) + "px)";

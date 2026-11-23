@@ -58,8 +58,8 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -.01em; margin: 0; }
 .hero { position: relative; height: 230vh; }
 .hero-sticky {
   position: sticky; top: 0; height: 100vh; overflow: hidden;
-  display: grid; place-items: start center;
-  padding: clamp(150px, 22vh, 210px) 20px 60px;
+  display: grid; place-items: center;
+  padding: 90px 20px 80px;
   isolation: isolate;
 }
 .hero-photo {
@@ -348,3 +348,14 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -.01em; margin: 0; }
   html { scroll-behavior: auto; }
 }
 .nowrap { white-space: nowrap; }
+
+/* ---------- melhorias de usabilidade ---------- */
+.pular { position: fixed; left: 12px; top: -60px; z-index: 50; padding: 10px 16px; border-radius: 8px; background: #fff; color: #000; font-weight: 600; text-decoration: none; transition: top .2s; }
+.pular:focus { top: 12px; }
+.scroll-hint { display: inline-flex; flex-direction: column; align-items: center; gap: 10px; transition: opacity .3s; }
+.mouse { width: 22px; height: 34px; border-radius: 12px; border: 2px solid rgba(255,255,255,.65); position: relative; }
+.mouse::after { content: ""; position: absolute; left: 50%; top: 6px; width: 3px; height: 7px; margin-left: -1.5px; border-radius: 2px; background: #fff; animation: rolinho 1.6s ease-in-out infinite; }
+@keyframes rolinho { 0% { opacity: 0; transform: translateY(0); } 30% { opacity: 1; } 100% { opacity: 0; transform: translateY(10px); } }
+.noscript { padding: 20px; text-align: center; color: var(--text); }
+@media (prefers-reduced-motion: reduce) { .mouse::after { animation: none; } }
+@media (max-width: 640px) { .btn-grad { font-size: 12px; padding: 0 16px; } }
