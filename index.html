@@ -12,11 +12,14 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://jottak2.github.io/radar-vagas/assets/zip-aberto.jpg">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2308060d'/%3E%3Ccircle cx='8' cy='8' r='3' fill='%23f070f0'/%3E%3Ccircle cx='16' cy='8' r='2' fill='%23fff'/%3E%3Ccircle cx='8' cy='16' r='2' fill='%23fff'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23c826d8'/%3E%3C/svg%3E">
-  <link rel="preload" as="image" href="assets/hero-pessoa.webp?v=8" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/hero-pessoa.webp?v=9" fetchpriority="high">
   <link rel="preconnect" href="https://api.fontshare.com">
   <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
   <link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css?v=8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css?v=9">
 </head>
 <body>
   <a class="pular" href="#vagas">Pular para as vagas</a>
@@ -35,31 +38,35 @@
 
   <main id="topo">
 
-    <!-- HERO -->
+    <!-- HERO (estilo pôster: palavra gigante + personagem na frente) -->
     <section class="hero" id="hero">
      <div class="hero-sticky">
-      <div class="hero-photo" id="hero-photo" aria-hidden="true"><img src="assets/hero-pessoa.webp?v=8" alt=""></div>
       <div class="hero-grid" aria-hidden="true"></div>
       <div class="hero-fog" aria-hidden="true"></div>
       <div class="hero-arc" aria-hidden="true"></div>
 
-      <div class="hero-inner">
-        <p class="kicker">Radar diário · Vagas + publicações do LinkedIn</p>
-        <h1>Diretor de Arte Jr e Designer Gráfico. <span class="nowrap">Todas as vagas</span> num só lugar.</h1>
+      <ul class="hero-nomes" aria-hidden="true">
+        <li>Diretor de Arte Jr</li><li>Designer Gráfico</li><li>São Paulo</li><li>Remoto</li>
+      </ul>
 
-        <ul class="chips" id="chips"></ul>
+      <h1 class="wordmark" id="wordmark"><span class="sr-only">Radar de vagas de Diretor de Arte Jr e Designer Gráfico · </span><span class="wm" aria-hidden="true"><b>J</b><b>O</b><b>T</b><b>T</b><b>A</b><b>K</b><b>2</b></span></h1>
+      <span class="wordmark-ano" aria-hidden="true">[2026]</span>
 
-        <div class="offer">
-          <div class="offer-price">
-            <span class="offer-de" id="offer-de">—</span>
-            <strong id="offer-num">—</strong>
-            <span class="offer-sub" id="offer-sub">—</span>
-          </div>
-          <div class="offer-cta">
-            <a class="btn btn-grad" id="cta-planilha" href="#" target="_blank" rel="noopener">Abrir planilha <span aria-hidden="true">↗</span></a>
-            <div class="bar" role="img" id="bar-wrap" aria-label="Progresso das candidaturas"><span id="bar"></span></div>
-            <p class="bar-label" id="bar-label">—</p>
-          </div>
+      <div class="hero-photo" id="hero-photo" aria-hidden="true"><img src="assets/hero-pessoa.webp?v=9" alt="" width="1376" height="768" fetchpriority="high" decoding="async"></div>
+
+      <div class="faixa" aria-hidden="true"><div class="faixa-trilho"></div></div>
+
+      <div class="hero-inner hero-base">
+        <div class="base-esq">
+          <p class="kicker">Vagas atualizadas todo dia</p>
+          <a class="btn btn-grad" id="cta-planilha" href="#" target="_blank" rel="noopener">Abrir planilha <span aria-hidden="true">↗</span></a>
+          <div class="bar" role="img" id="bar-wrap" aria-label="Progresso das candidaturas"><span id="bar"></span></div>
+          <p class="bar-label" id="bar-label">—</p>
+        </div>
+        <ul class="selos" id="chips"></ul>
+        <div class="base-dir">
+          <p class="citacao"><span id="offer-de">—</span> <strong id="offer-num">—</strong></p>
+          <p class="citacao-sub" id="offer-sub">—</p>
         </div>
       </div>
       <span class="scroll-hint" id="scroll-hint"><i class="mouse" aria-hidden="true"></i>Role para ver as vagas</span>
@@ -69,10 +76,10 @@
     <!-- ZÍPER: fecha, abre e o personagem entrega o painel -->
     <section class="zip" id="zip" aria-label="Apresentação">
       <div class="zip-sticky">
-        <div class="zip-aberto" id="zip-aberto" aria-hidden="true"><img src="assets/zip-aberto.jpg?v=8" alt=""></div>
+        <div class="zip-aberto" id="zip-aberto" aria-hidden="true"><img src="assets/zip-aberto.jpg?v=9" alt=""></div>
         <div class="zip-fechado" id="zip-fechado" aria-hidden="true">
-          <div class="zip-metade zip-cima" id="zip-cima"><img src="assets/zip-fechado.jpg?v=8" alt=""></div>
-          <div class="zip-metade zip-baixo" id="zip-baixo"><img src="assets/zip-fechado.jpg?v=8" alt=""></div>
+          <div class="zip-metade zip-cima" id="zip-cima"><img src="assets/zip-fechado.jpg?v=9" alt=""></div>
+          <div class="zip-metade zip-baixo" id="zip-baixo"><img src="assets/zip-fechado.jpg?v=9" alt=""></div>
         </div>
 
         <div class="fundo-azul" id="fundo-azul" aria-hidden="true"></div>
@@ -161,7 +168,7 @@
   </footer>
 
   <noscript><p class="noscript">Ative o JavaScript para ver as vagas, ou <a href="https://claude.ai/artifact/SMu9EpjfEewV5nqZhCjUuo">abra a planilha</a>.</p></noscript>
-  <script src="data/vagas.js?v=8"></script>
-  <script src="assets/app.js?v=8"></script>
+  <script src="data/vagas.js?v=9"></script>
+  <script src="assets/app.js?v=9"></script>
 </body>
 </html>

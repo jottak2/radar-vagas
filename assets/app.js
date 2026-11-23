@@ -53,21 +53,18 @@
   var novas = vagas.filter(isNova).length;
   var feitas = vagas.filter(function (v) { return FEITO.indexOf(v.status) > -1; }).length;
 
-  var chips = [
-    ["#c826d8", "✦", total + " vagas", ""],
-    ["#ff3f74", "!", altas + " alta aderência", ""],
-    ["#3b37b5", "⌂", remotas + " remotas", ""],
-    ["#6a12b0", "SP", sp + " em São Paulo", ""],
-    ["#1f9d6b", "+", novas + " novas", "24h"]
+  var selos = [
+    ["", "vagas", total],
+    ["quente", "alta aderência", altas],
+    ["claro", "novas 24h", novas]
   ];
-  $("chips").innerHTML = chips.map(function (c) {
-    return '<li class="chip"><i style="background:' + c[0] + '">' + c[1] + "</i>" + esc(c[2]) +
-      (c[3] ? " <small>" + c[3] + "</small>" : "") + "</li>";
+  $("chips").innerHTML = selos.map(function (c) {
+    return '<li class="selo ' + c[0] + '"><small>' + esc(c[1]) + "</small><b>" + esc(c[2]) + "</b></li>";
   }).join("");
 
-  $("offer-de").textContent = "De " + total + " vagas:";
-  $("offer-num").textContent = altas + " com alta aderência";
-  $("offer-sub").textContent = novas + " novas nas últimas 24h";
+  $("offer-de").textContent = remotas + " remotas e " + sp + " em São Paulo.";
+  $("offer-num").textContent = altas + " combinam muito com você.";
+  $("offer-sub").textContent = "Atualizado " + quando;
   var pct = total ? Math.round((feitas / total) * 100) : 0;
   $("bar-label").textContent = feitas + " de " + total + " já salvas ou candidatadas (" + pct + "%)";
   $("bar-wrap").setAttribute("aria-label", pct + "% das vagas já salvas ou candidatadas");
@@ -162,22 +159,23 @@
       var a = ease(clamp(p / 0.45));          // fase 1: o personagem chega
       var b = ease(clamp((p - 0.45) / 0.45)); // fase 2: vai para o segundo plano
       var blurBase, brilho;
+      var wm = $("wordmark"), base = document.querySelector(".hero-base");
       if (p < 0.45) {
-        foto.style.zIndex = a > 0.35 ? 2 : 0; // atrás do texto no início, na frente quando chega
-        foto.style.opacity = 0.45 + 0.55 * a;
-        foto.style.transform = "translateX(" + (38 * (1 - a)) + "%) scale(" + (1.08 - 0.08 * a) + ")";
-        blurBase = 6 * (1 - a); brilho = 0.55 + 0.45 * a;
-        txt.style.opacity = 1 - a;
-        txt.style.filter = "blur(" + (8 * a) + "px)";
-        txt.style.transform = "translateY(" + (-30 * a) + "px)";
+        foto.style.zIndex = 2;
+        foto.style.opacity = 1;
+        foto.style.transform = "translateY(" + (-4 * a) + "%) scale(" + (1 + 0.14 * a) + ")";
+        blurBase = 0; brilho = 1;
+        wm.style.transform = "scale(" + (1 - 0.06 * a) + ")"; wm.style.opacity = 1 - 0.5 * a;
+        base.style.opacity = 1 - a; base.style.transform = "translateY(" + (30 * a) + "px)";
+        txt.style.filter = "none";
       } else {
         foto.style.zIndex = 0;
-        foto.style.opacity = 1 - 0.55 * b;
-        foto.style.transform = "translateY(" + (4 * b) + "%) scale(" + (1 - 0.22 * b) + ")";
+        foto.style.opacity = 1 - 0.6 * b;
+        foto.style.transform = "translateY(" + (-4 + 8 * b) + "%) scale(" + (1.14 - 0.34 * b) + ")";
         blurBase = 8 * b; brilho = 1 - 0.5 * b;
-        txt.style.opacity = b;
-        txt.style.filter = "blur(" + (8 * (1 - b)) + "px)";
-        txt.style.transform = "translateY(" + (30 * (1 - b)) + "px)";
+        wm.style.transform = "scale(" + (0.94 + 0.06 * b) + ")"; wm.style.opacity = 0.5 + 0.5 * b;
+        base.style.opacity = b; base.style.transform = "translateY(" + (30 * (1 - b)) + "px)";
+        txt.style.filter = "none";
       }
       var blur = reduz ? blurBase : blurBase + velBlur;
       foto.style.filter = "blur(" + blur.toFixed(2) + "px) brightness(" + brilho.toFixed(3) + ")";
