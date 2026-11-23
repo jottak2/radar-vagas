@@ -191,6 +191,49 @@
     rodando = true; quadro();
   })();
 
+  // ---- zíper: fecha, abre, personagem entrega o painel ----
+  (function () {
+    var sec = $("zip"); if (!sec) return;
+    var aberto = $("zip-aberto"), fechado = $("zip-fechado"), cima = $("zip-cima"), baixo = $("zip-baixo");
+    var painel = $("painel"), lista = $("painel-lista");
+    var reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var clamp = function (x) { return Math.max(0, Math.min(1, x)); };
+    var ease = function (x) { return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+    var fase = function (p, a, b) { return ease(clamp((p - a) / (b - a))); };
+    var pedido = false;
+    function quadro() {
+      pedido = false;
+      var total = sec.offsetHeight - window.innerHeight;
+      var p = reduz ? 1 : clamp(-sec.getBoundingClientRect().top / (total || 1));
+      var fecha = fase(p, 0, .16);   // zíper "fechando": aproxima
+      var abre = fase(p, .16, .48);  // zíper abre e revela o personagem
+      var mao = fase(p, .44, .6);    // personagem estica a mão
+      var card = fase(p, .56, .72);  // painel sai da mão
+      var rola = clamp((p - .74) / .26); // informações rolam dentro do painel
+
+      var zoom = 1.25 - .25 * fecha;
+      var sep = abre * 55; // vh
+      fechado.style.transform = "scale(" + zoom + ")";
+      fechado.style.filter = "blur(" + (abre * 6) + "px) brightness(" + (1 - abre * .4) + ")";
+      cima.style.transform = "translateY(" + (-sep) + "vh)";
+      baixo.style.transform = "translateY(" + sep + "vh)";
+
+      aberto.style.setProperty("--rx", (abre * 95) + "%");
+      aberto.style.setProperty("--ry", (abre * 80) + "%");
+      aberto.style.transform = "scale(" + (1.18 - .18 * abre + .08 * mao) + ")";
+      aberto.style.filter = "blur(" + ((1 - abre) * 10 + card * 5) + "px) brightness(" + (1 - card * .35) + ")";
+
+      painel.style.opacity = card;
+      painel.style.transform = "translate(-50%, -50%) translate(" + ((1 - card) * 18) + "vw, " + ((1 - card) * 4) + "vh) scale(" + (.1 + .9 * card) + ")";
+      painel.style.pointerEvents = card > .9 ? "auto" : "none";
+      var falta = Math.max(0, lista.scrollHeight - lista.parentElement.clientHeight);
+      lista.style.transform = "translateY(" + (-falta * rola) + "px)";
+    }
+    window.addEventListener("scroll", function () { if (!pedido) { pedido = true; requestAnimationFrame(quadro); } }, { passive: true });
+    window.addEventListener("resize", quadro);
+    quadro();
+  })();
+
   // ---- entrada suave ----
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (ents) {
