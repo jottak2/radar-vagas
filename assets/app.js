@@ -141,41 +141,54 @@
   $("busca").addEventListener("input", function (e) { termo = e.target.value; render(); });
   render();
 
-  // ---- paralaxe da capa ----
+  // ---- paralaxe da capa: só o personagem se move, com desfoque na rolagem ----
   (function () {
     var hero = $("hero"), foto = $("hero-photo"), txt = document.querySelector(".hero-inner"), hint = $("scroll-hint");
     if (!hero || !foto) return;
     var reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var clamp = function (x) { return Math.max(0, Math.min(1, x)); };
     var ease = function (x) { return 1 - Math.pow(1 - x, 3); };
+    var ultimoY = window.scrollY, ultimoT = performance.now(), velBlur = 0, rodando = false;
+
     function quadro() {
+      var agora = performance.now();
+      var dy = Math.abs(window.scrollY - ultimoY), dt = Math.max(16, agora - ultimoT);
+      ultimoY = window.scrollY; ultimoT = agora;
+      // desfoque de movimento: cresce com a velocidade da rolagem e some quando para
+      velBlur = Math.max(velBlur * 0.86, Math.min(10, (dy / dt) * 6));
+
       var total = hero.offsetHeight - window.innerHeight;
       var p = reduz ? 1 : clamp(-hero.getBoundingClientRect().top / (total || 1));
       var a = ease(clamp(p / 0.45));          // fase 1: o personagem chega
       var b = ease(clamp((p - 0.45) / 0.45)); // fase 2: vai para o segundo plano
+      var blurBase, brilho;
       if (p < 0.45) {
         foto.style.zIndex = 2;
         foto.style.opacity = a;
         foto.style.transform = "translateX(" + (60 * (1 - a)) + "%) scale(" + (1.08 - 0.08 * a) + ")";
-        foto.style.filter = "none";
+        blurBase = 14 * (1 - a); brilho = 1;
         txt.style.opacity = 1 - a;
+        txt.style.filter = "blur(" + (8 * a) + "px)";
         txt.style.transform = "translateY(" + (-30 * a) + "px)";
       } else {
         foto.style.zIndex = 0;
         foto.style.opacity = 1 - 0.55 * b;
         foto.style.transform = "translateY(" + (4 * b) + "%) scale(" + (1 - 0.22 * b) + ")";
-        foto.style.filter = "blur(" + (5 * b) + "px) brightness(" + (1 - 0.5 * b) + ")";
+        blurBase = 8 * b; brilho = 1 - 0.5 * b;
         txt.style.opacity = b;
+        txt.style.filter = "blur(" + (8 * (1 - b)) + "px)";
         txt.style.transform = "translateY(" + (30 * (1 - b)) + "px)";
       }
+      var blur = reduz ? blurBase : blurBase + velBlur;
+      foto.style.filter = "blur(" + blur.toFixed(2) + "px) brightness(" + brilho.toFixed(3) + ")";
       if (hint) hint.style.opacity = p > 0.05 ? 0 : 1;
+
+      if (velBlur > 0.05 && !reduz) { requestAnimationFrame(quadro); } else { velBlur = 0; rodando = false; }
     }
-    var pedido = false;
-    window.addEventListener("scroll", function () {
-      if (!pedido) { pedido = true; requestAnimationFrame(function () { quadro(); pedido = false; }); }
-    }, { passive: true });
-    window.addEventListener("resize", quadro);
-    quadro();
+    function pedir() { if (!rodando) { rodando = true; requestAnimationFrame(quadro); } }
+    window.addEventListener("scroll", pedir, { passive: true });
+    window.addEventListener("resize", pedir);
+    rodando = true; quadro();
   })();
 
   // ---- entrada suave ----
