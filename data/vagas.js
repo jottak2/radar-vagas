@@ -1,6 +1,6 @@
 /* Gerado automaticamente por scripts/gerar_vagas.py. Não edite à mão. */
 window.VAGAS_DATA = {
-  "atualizadoEm": "2026-11-25T13:46:11-03:00",
+  "atualizadoEm": "2026-11-25T13:51:13-03:00",
   "planilhaUrl": "https://claude.ai/artifact/SMu9EpjfEewV5nqZhCjUuo",
   "vagas": [
     {
@@ -585,6 +585,138 @@ window.VAGAS_DATA = {
       "obs": "InfoJobs. R$ 1.500 a 1.900; pede menos de 1 ano de experiência, bem abaixo do seu nível.",
       "tipo": "Designer Gráfico",
       "publicada": "2026-11-24"
+    },
+    {
+      "vaga": "Diretor de Arte",
+      "empresa": "Agência Babel-Azza",
+      "local": "Brasil – Remoto",
+      "aderencia": "Alta",
+      "status": "A candidatar",
+      "link": "https://br.indeed.com/viewjob?jk=ea6b036d34f595a4",
+      "obs": "Indeed e Trampos. Remoto. Desdobramento de KVs e layouts de campanha (social, PDV, OOH, impresso) a partir de conceitos dos seniores: perfil de DA júnior, apesar do título. Candidatura no site da empresa.",
+      "tipo": "Diretor de Arte Júnior",
+      "publicada": null
+    },
+    {
+      "vaga": "Designer Gráfico Pleno",
+      "empresa": "FK | Fast Key (marca premium de mobiliário)",
+      "local": "São Paulo – Híbrido",
+      "aderencia": "Alta",
+      "status": "A candidatar",
+      "link": "https://br.indeed.com/viewjob?jk=b6ca98cc74e208f8",
+      "obs": "Indeed e Trampos. Prestação de serviço (PJ). Campanhas, lançamentos, mídia digital, catálogos, lojas e eventos.",
+      "tipo": "Designer Pleno",
+      "publicada": "2026-11-19"
+    },
+    {
+      "vaga": "Designer Gráfico",
+      "empresa": "Costura SP",
+      "local": "São Paulo – Itaim Bibi",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://br.indeed.com/viewjob?jk=539c66ff39a550bd",
+      "obs": "Indeed. CLT, R$ 1.621 a 6.000. Campanhas, lojas próprias, franquias, redes sociais e PDV.",
+      "tipo": "Designer Gráfico",
+      "publicada": null
+    },
+    {
+      "vaga": "Designer Pleno",
+      "empresa": "Cognita Schools",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://br.indeed.com/viewjob?jk=7b85f3d37b2cb3c2",
+      "obs": "Indeed. Escola: redes sociais, campanhas, eventos e conteúdo audiovisual.",
+      "tipo": "Designer Pleno",
+      "publicada": null
+    },
+    {
+      "vaga": "Designer Gráfico Júnior",
+      "empresa": "Empresa confidencial",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Média",
+      "status": "Candidatado",
+      "link": "https://www.catho.com.br/vagas/designer-grafico-junior/39417813/",
+      "obs": "Catho. R$ 3.000. Você já enviou o CV pela Catho.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-25"
+    },
+    {
+      "vaga": "Designer Gráfico Júnior",
+      "empresa": "Associação Enkyo",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Baixa",
+      "status": "A candidatar",
+      "link": "https://www.catho.com.br/vagas/designer-grafico-junior/39390901/",
+      "obs": "Catho. A partir de R$ 2.000.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "Designer Gráfico Pleno",
+      "empresa": "Empresa confidencial",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.catho.com.br/vagas/designer-grafico-pleno/39388518/",
+      "obs": "Catho. Pode ser a mesma vaga confidencial de Designer Gráfico Pleno do InfoJobs (mesma data).",
+      "tipo": "Designer Pleno",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "Designer Gráfico e Audiovisual Júnior",
+      "empresa": "Iccarus",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Média",
+      "status": "Candidatado",
+      "link": "https://www.catho.com.br/vagas/designer-grafico-e-audiovisual-junior/39387847/",
+      "obs": "Catho. Você já enviou o CV pela Catho.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "Designer Gráfico",
+      "empresa": "Nação Verde",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Média",
+      "status": "Candidatado",
+      "link": "https://www.catho.com.br/vagas/designer-grafico/39324417/",
+      "obs": "Catho. R$ 3.500. Você já enviou o CV pela Catho.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-18"
+    },
+    {
+      "vaga": "Designer Gráfico Sênior",
+      "empresa": "Empresa confidencial",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.catho.com.br/vagas/designer-grafico-senior/39327594/",
+      "obs": "Catho. Pode ser a mesma vaga de marca de moda do InfoJobs (mesma data).",
+      "tipo": "Designer Sênior",
+      "publicada": "2026-11-18"
+    },
+    {
+      "vaga": "Designer Gráfico Pleno/Sênior – Marketing Digital",
+      "empresa": "OSURE",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.catho.com.br/vagas/designer-grafico-plenosenior-marketing-digital/39324772/",
+      "obs": "Catho.",
+      "tipo": "Designer Sênior",
+      "publicada": "2026-11-18"
+    },
+    {
+      "vaga": "Diretor de Arte",
+      "empresa": "Cresci e Perdi",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Média",
+      "status": "Candidatado",
+      "link": "https://www.catho.com.br/vagas/diretor-de-arte/39313255/",
+      "obs": "Catho. Você já enviou o CV pela Catho.",
+      "tipo": "Diretor de Arte",
+      "publicada": "2026-11-17"
     }
   ]
 };
