@@ -51,7 +51,16 @@
   var remotas = vagas.filter(isRemoto).length;
   var sp = vagas.filter(isSP).length;
   var novas = vagas.filter(isNova).length;
-  var feitas = vagas.filter(function (v) { return FEITO.indexOf(v.status) > -1; }).length;
+  // ---- checklist "Me candidatei" (guardado neste navegador) ----
+  var CHAVE = "radar-vagas:candidatei";
+  var marcadas = {};
+  try { marcadas = JSON.parse(localStorage.getItem(CHAVE) || "{}") || {}; } catch (e) { marcadas = {}; }
+  var idDe = function (v) { return v.link || (v.vaga + "|" + v.empresa); };
+  var candidatei = function (v) {
+    var id = idDe(v);
+    return id in marcadas ? !!marcadas[id] : v.status === "Candidatado";
+  };
+  var salvar = function () { try { localStorage.setItem(CHAVE, JSON.stringify(marcadas)); } catch (e) {} };
 
   var selos = [
     ["", "vagas", total],
@@ -65,10 +74,14 @@
   $("offer-de").textContent = remotas + " remotas e " + sp + " em São Paulo.";
   $("offer-num").textContent = altas + " combinam muito com você.";
   $("offer-sub").textContent = "Atualizado " + quando;
-  var pct = total ? Math.round((feitas / total) * 100) : 0;
-  $("bar-label").textContent = feitas + " de " + total + " já salvas ou candidatadas (" + pct + "%)";
-  $("bar-wrap").setAttribute("aria-label", pct + "% das vagas já salvas ou candidatadas");
-  requestAnimationFrame(function () { setTimeout(function () { $("bar").style.width = pct + "%"; }, 300); });
+  function progresso() {
+    var feitas = vagas.filter(candidatei).length;
+    var pct = total ? Math.round((feitas / total) * 100) : 0;
+    $("bar-label").textContent = "Me candidatei a " + feitas + " de " + total + " vagas (" + pct + "%)";
+    $("bar-wrap").setAttribute("aria-label", "Candidatura enviada em " + pct + "% das vagas");
+    $("bar").style.width = pct + "%";
+  }
+  requestAnimationFrame(function () { setTimeout(progresso, 300); });
 
   // ---- destaques (cards do carrossel dentro do cartão) ----
   var top = vagas.filter(function (v) { return v.aderencia === "Alta"; }).slice(0, 8);
@@ -94,26 +107,32 @@
     designer: function (v) { return !isDA(v); },
     sp: isSP,
     remoto: isRemoto,
-    pendentes: function (v) { return v.status === "A candidatar"; }
+    pendentes: function (v) { return !candidatei(v); },
+    candidatei: candidatei
   };
 
-  function card(v) {
+  function card(v, i) {
     var url = safeUrl(v.link);
     var classe = v.aderencia === "Alta" ? "alta" : v.aderencia === "Baixa" ? "baixa" : "media";
     var feito = FEITO.indexOf(v.status) > -1 && v.status !== "Salva";
-    return '<article class="card">' +
+    var marcou = candidatei(v);
+    return '<article class="card' + (marcou ? " is-candidatei" : "") + '">' +
       '<div class="card-top"><div class="tags">' +
         '<span class="tag ' + classe + '">' + esc(v.aderencia) + "</span>" +
         (isNova(v) ? '<span class="tag nova">Nova</span>' : "") +
       "</div>" +
-      '<span class="status' + (feito ? " feito" : "") + '">' + esc(v.status) + "</span></div>" +
+      '<span class="status' + (feito || marcou ? " feito" : "") + '">' + esc(marcou ? "Candidatei ✓" : v.status) + "</span></div>" +
       "<h3>" + esc(v.vaga) + "</h3>" +
       '<p class="empresa">' + esc(v.empresa) + "</p>" +
       '<div class="meta"><span>' + esc(v.local) + "</span>" +
         (v.tipo ? "<span>" + esc(v.tipo) + "</span>" : "") +
         (v.publicada ? "<span>" + ddmm(v.publicada) + "</span>" : "") + "</div>" +
       (v.obs ? '<p class="obs">' + esc(v.obs) + "</p>" : '<p class="obs"></p>') +
-      (url ? '<a class="btn" href="' + esc(url) + '" target="_blank" rel="noopener">Abrir vaga ↗</a>' : "") +
+      '<div class="card-acoes">' +
+        (url ? '<a class="btn" href="' + esc(url) + '" target="_blank" rel="noopener">Abrir vaga ↗</a>' : "") +
+        '<label class="check"><input type="checkbox" data-id="' + esc(idDe(v)) + '"' + (marcou ? " checked" : "") +
+        '><span class="caixa" aria-hidden="true"></span><span>Me candidatei</span></label>' +
+      "</div>" +
       "</article>";
   }
 
@@ -136,6 +155,24 @@
     });
   });
   $("busca").addEventListener("input", function (e) { termo = e.target.value; render(); });
+  $("grid").addEventListener("change", function (e) {
+    var cb = e.target;
+    if (!cb.matches || !cb.matches('input[type="checkbox"][data-id]')) return;
+    marcadas[cb.getAttribute("data-id")] = cb.checked;
+    salvar();
+    var art = cb.closest(".card");
+    if (art) {
+      art.classList.toggle("is-candidatei", cb.checked);
+      var st = art.querySelector(".status");
+      var v = vagas.filter(function (x) { return idDe(x) === cb.getAttribute("data-id"); })[0];
+      if (st && v) {
+        st.textContent = cb.checked ? "Candidatei ✓" : v.status;
+        st.classList.toggle("feito", cb.checked || (FEITO.indexOf(v.status) > -1 && v.status !== "Salva"));
+      }
+    }
+    progresso();
+    if (filtro === "pendentes" || filtro === "candidatei") setTimeout(render, 350);
+  });
   render();
 
   // ---- paralaxe da capa: só o personagem se move, com desfoque na rolagem ----
