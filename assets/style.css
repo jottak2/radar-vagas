@@ -478,3 +478,12 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -.01em; margin: 0; }
 @media (prefers-reduced-motion: reduce) {
   .wm b, .hero .hero-photo img, .faixa-trilho { animation: none; }
 }
+
+/* capa 3D: Thunderbird 1957 */
+.hero .hero-3d { inset: auto 0 0 0; height: 84vh; z-index: 2; pointer-events: none; }
+.hero-3d canvas { display: block; width: 100% !important; height: 100% !important; opacity: 0; transition: opacity 1s ease; }
+.hero-3d.carregado canvas { opacity: 1; }
+.hero-3d.sem-3d { display: none; }
+@media (max-width: 760px) {
+  .hero .hero-3d { inset: auto 0 auto 0; top: calc(clamp(96px, 15vh, 150px) + 2vh); height: 52vh; }
+}
