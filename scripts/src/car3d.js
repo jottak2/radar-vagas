@@ -58,6 +58,15 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
   window.addEventListener('resize', tamanho); tamanho();
 
   var pronto = false, inicio = 0;
+  // personagem que pula o carro (animação "Jumping" do Mixamo, roupa roxa)
+  var pulo = new THREE.Group(); palco.add(pulo);
+  var boneco = null, mixer = null, acao = null, duracao = 1, sentido = 0, pausa = 0, ultimoT = 0, eixoLongoX = true, meioPulo = 1.6;
+  var ESC_BONECO = 0.009, ALTURA_ARCO = 1.5, VEL = 0.85, DESCANSO = 0.9;
+  var urlBoneco = holder.getAttribute('data-personagem');
+  function posicionaPulo() {
+    // o personagem anda no seu +Z: atravessa o carro pela largura
+    pulo.rotation.y = (eixoLongoX ? 0 : Math.PI / 2) + sentido * Math.PI;
+  }
   var loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
   loader.load(url, function (gltf) {
     var m = gltf.scene;
@@ -66,16 +75,53 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
     m.scale.setScalar(esc);
     m.position.set(-c.x * esc, -box.min.y * esc, -c.z * esc);
     // deixa o comprimento no eixo X
-    if (size.z > size.x) m.rotation.y = 0; 
+    eixoLongoX = size.x >= size.z;
     carro.add(m);
     var L = Math.max(size.x, size.z) * esc, W = Math.min(size.x, size.z) * esc;
     sombra.scale.set(size.z > size.x ? W * 1.7 : L * 1.25, size.z > size.x ? L * 1.25 : W * 1.7, 1);
     sombra.position.y = 0.01;
     m.traverse(function (o) { if (o.isMesh && o.material) { o.material.envMapIntensity = 1.2; } });
+    posicionaPulo();
+    if (urlBoneco) carregaBoneco();
     pronto = true; inicio = performance.now();
     holder.classList.add('carregado');
     pedir();
   }, undefined, function () { holder.classList.add('sem-3d'); });
+
+  function carregaBoneco() {
+    loader.load(urlBoneco, function (g2) {
+      boneco = g2.scene; boneco.scale.setScalar(ESC_BONECO);
+      boneco.traverse(function (o) { if (o.isMesh) { o.frustumCulled = false; if (o.material) o.material.envMapIntensity = 0.8; } });
+      var clip = g2.animations[0];
+      mixer = new THREE.AnimationMixer(boneco);
+      acao = mixer.clipAction(clip); acao.setLoop(THREE.LoopOnce); acao.clampWhenFinished = true;
+      duracao = clip.duration;
+      // o quadril anda ~3,5 m no clipe: centraliza o pulo no meio do carro
+      var hp = clip.tracks.filter(function (tr) { return /Hips\.position$/.test(tr.name); })[0];
+      if (hp) { var v = hp.values; meioPulo = (v[2] + v[v.length - 1]) / 2 * ESC_BONECO; }
+      boneco.position.z = -meioPulo;
+      pulo.add(boneco);
+      acao.play(); acao.paused = !!reduz;
+      if (reduz) { mixer.setTime(0); }
+      pedir();
+    });
+  }
+  function atualizaPulo(t) {
+    if (!mixer) return;
+    var dt = Math.min(0.05, Math.max(0, (t - (ultimoT || t)) / 1000)); ultimoT = t;
+    if (reduz) { mixer.update(0); pulo.position.y = 0; return; }
+    if (pausa > 0) {
+      pausa -= dt;
+      if (pausa <= 0) { sentido = 1 - sentido; posicionaPulo(); acao.reset().play(); }
+    } else {
+      mixer.update(dt * VEL);
+      if (acao.time >= duracao - 1e-3) pausa = DESCANSO;
+    }
+    // arco extra para passar por cima do teto do carro
+    var u = clamp((acao.time / duracao - 0.12) / (0.93 - 0.12));
+    // arco de topo achatado: sobe rápido, fica alto sobre o teto e desce no fim
+    pulo.position.y = ALTURA_ARCO * Math.pow(Math.sin(Math.PI * u), 0.55);
+  }
 
   var mx = 0, my = 0, tx = 0, ty = 0;
   window.addEventListener('pointermove', function (e) {
@@ -107,6 +153,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
     palco.position.y = -0.25 + (1 - e) * 0.15;
     var zoom = 1 + p * 0.18;
     palco.scale.setScalar(zoom);
+    atualizaPulo(t);
     renderer.render(scene, camera);
     var anima = !reduz && (e < 1 || Math.abs(tx - mx) > 0.001 || Math.abs(ty - my) > 0.001 || true);
     if (anima) pedir();
