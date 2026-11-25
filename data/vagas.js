@@ -1,6 +1,6 @@
 /* Gerado automaticamente por scripts/gerar_vagas.py. Não edite à mão. */
 window.VAGAS_DATA = {
-  "atualizadoEm": "2026-11-25T13:09:58-03:00",
+  "atualizadoEm": "2026-11-25T13:46:11-03:00",
   "planilhaUrl": "https://claude.ai/artifact/SMu9EpjfEewV5nqZhCjUuo",
   "vagas": [
     {
@@ -529,6 +529,61 @@ window.VAGAS_DATA = {
       "link": "",
       "obs": "Post da MRH Seleção (consultoria). Nível e local não informados. Candidatura em mrh.tweezer.jobs, vaga nº 10279.",
       "tipo": "Publicação",
+      "publicada": "2026-11-24"
+    },
+    {
+      "vaga": "Designer Gráfico Sênior",
+      "empresa": "Empresa confidencial (marca de moda)",
+      "local": "São Paulo – Presencial",
+      "aderencia": "Alta",
+      "status": "A candidatar",
+      "link": "https://www.infojobs.com.br/vaga-de-designer-grafico-senior-em-sao-paulo__12232001.aspx",
+      "obs": "InfoJobs. Conceito e direção de arte de campanhas e coleções, acompanhamento de set, curadoria e tratamento de imagem. Pede 5 a 10 anos de experiência.",
+      "tipo": "Designer Sênior",
+      "publicada": "2026-11-18"
+    },
+    {
+      "vaga": "Designer Gráfico Pleno",
+      "empresa": "Empresa confidencial",
+      "local": "São Paulo – Presencial",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.infojobs.com.br/vaga-de-designer-grafico-pleno-em-sao-paulo__12241492.aspx",
+      "obs": "InfoJobs. CLT, período integral. Produção gráfica, design digital e identidade visual; diferencial ter atuado com produto de tecnologia.",
+      "tipo": "Designer Pleno",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "Assistente de Produção Digital – Design Gráfico",
+      "empresa": "Modi7",
+      "local": "São Paulo – Presencial",
+      "aderencia": "Baixa",
+      "status": "A candidatar",
+      "link": "https://www.infojobs.com.br/vaga-de-assistente-producao-digital-design-grafico-em-sao-paulo__12238816.aspx",
+      "obs": "InfoJobs. R$ 3.500. Cargo de assistente, abaixo do seu nível. Contratação urgente.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-20"
+    },
+    {
+      "vaga": "Designer Gráfico",
+      "empresa": "GS Consultoria Comercial",
+      "local": "São Paulo – Presencial",
+      "aderencia": "Baixa",
+      "status": "A candidatar",
+      "link": "https://www.infojobs.com.br/vaga-de-designer-grafico-em-sao-paulo__12123006.aspx",
+      "obs": "InfoJobs. R$ 2.512.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-19"
+    },
+    {
+      "vaga": "Designer e Editor(a) de Vídeo",
+      "empresa": "Mira leads",
+      "local": "São Paulo – Híbrido",
+      "aderencia": "Baixa",
+      "status": "A candidatar",
+      "link": "https://www.infojobs.com.br/vaga-de-designer-editora-video-design-grafico,-web-design-audiovisual-em-sao-paulo__12244601.aspx",
+      "obs": "InfoJobs. R$ 1.500 a 1.900; pede menos de 1 ano de experiência, bem abaixo do seu nível.",
+      "tipo": "Designer Gráfico",
       "publicada": "2026-11-24"
     }
   ]
