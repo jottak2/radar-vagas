@@ -58,14 +58,14 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
   window.addEventListener('resize', tamanho); tamanho();
 
   var pronto = false, inicio = 0;
-  // personagem que corre e pula o carro sem parar (animação "Jumping" do Mixamo, roupa roxa)
+  // personagem: corre, pula o carro, tropeça e cai (animações "Jumping" e "Soccer Trip" do Mixamo, roupa roxa)
   var pulo = new THREE.Group(); palco.add(pulo);
-  var boneco = null, mixer = null, acao = null, duracao = 1, ultimoT = 0, eixoLongoX = true;
-  var passo = 3.2, distTotal = 9.6, pos = 0, mats = [];
-  var ESC_BONECO = 0.009, ALTURA_ARCO = 1.5, VEL = 0.85;
+  var boneco = null, mixer = null, aPulo = null, aTrop = null, durPulo = 1, durTrop = 1, ultimoT = 0, eixoLongoX = true;
+  var meioPulo = 1.6, offTrop = new THREE.Vector3(), estado = 'pulo', tEst = 0, mats = [];
+  var ESC_BONECO = 0.009, ALTURA_ARCO = 1.5, VEL = 0.85, ENCURTA_QUEDA = 0.4, DESVIO = 0.45, CAIDO = 1.3, SOME = 0.5, APARECE = 0.3;
   function posicionaPulo() {
-    // a pista atravessa o carro pela largura, sempre no mesmo sentido
-    pulo.rotation.y = eixoLongoX ? 0 : Math.PI / 2;
+    // a pista atravessa o carro pela largura
+    pulo.rotation.y = (eixoLongoX ? 0 : Math.PI / 2) + DESVIO;
   }
   var urlBoneco = holder.getAttribute('data-personagem');
   var loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
@@ -89,54 +89,76 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
     pedir();
   }, undefined, function () { holder.classList.add('sem-3d'); });
 
+  function quadril(clip) { return clip.tracks.filter(function (tr) { return /Hips\.position$/.test(tr.name); })[0]; }
   function carregaBoneco() {
     loader.load(urlBoneco, function (g2) {
       boneco = g2.scene; boneco.scale.setScalar(ESC_BONECO);
       boneco.traverse(function (o) {
         if (o.isMesh) { o.frustumCulled = false; if (o.material) { o.material.envMapIntensity = 0.8; o.material.userData.transpOriginal = o.material.transparent; mats.push(o.material); } }
       });
-      var clip = g2.animations[0];
-      duracao = clip.duration;
-      // tira o deslocamento do quadril (root motion): o avanço passa a ser contínuo, feito pelo código
-      var hp = clip.tracks.filter(function (tr) { return /Hips\.position$/.test(tr.name); })[0];
-      if (hp) {
-        var v = hp.values, tt = hp.times, z0 = v[2], z1 = v[v.length - 1];
-        for (var i = 0; i < tt.length; i++) v[i * 3 + 2] -= z0 + (z1 - z0) * (tt[i] / duracao);
-        passo = (z1 - z0) * ESC_BONECO;
-      }
-      distTotal = passo * 3;
+      var cPulo = g2.animations.filter(function (c) { return c.name === 'pulo'; })[0] || g2.animations[0];
+      var cTrop = g2.animations.filter(function (c) { return c.name === 'tropeco'; })[0];
+      durPulo = cPulo.duration;
+      var hp = quadril(cPulo), v = hp.values, n = v.length;
+      meioPulo = (v[2] + v[n - 1]) / 2 * ESC_BONECO;
       mixer = new THREE.AnimationMixer(boneco);
-      acao = mixer.clipAction(clip); acao.play(); acao.paused = true;
+      aPulo = mixer.clipAction(cPulo); aPulo.play(); aPulo.paused = true;
+      if (cTrop) {
+        durTrop = cTrop.duration;
+        var ht = quadril(cTrop), w = ht.values, z0 = w[2];
+        // a queda escorrega menos para ele não sair do quadro
+        for (var i = 2; i < w.length; i += 3) w[i] = z0 + (w[i] - z0) * ENCURTA_QUEDA;
+        // emenda: o quadril começa o tropeço onde terminou o pulo
+        offTrop.set((v[n - 3] - w[0]) * ESC_BONECO, 0, (v[n - 1] - w[2]) * ESC_BONECO);
+        aTrop = mixer.clipAction(cTrop); aTrop.play(); aTrop.paused = true; aTrop.setEffectiveWeight(0);
+      }
       pulo.add(boneco);
-      pos = reduz ? -passo * 1.1 : -distTotal / 2;
+      if (reduz) { aPulo.time = durPulo * 0.55; }
       pedir();
     });
   }
-  function atualizaPulo(t) {
-    if (!mixer) return;
-    var dt = Math.min(0.05, Math.max(0, (t - (ultimoT || t)) / 1000)); ultimoT = t;
-    if (!reduz) {
-      var vel = passo / duracao * VEL;
-      pos += vel * dt;
-      if (pos > distTotal / 2) pos -= distTotal; // sai pela frente e volta por trás, sem virar
-    }
-    // em que ponto do ciclo de pulo ele está (o pulo do meio fica centrado no carro)
-    var s = pos + distTotal / 2, ciclo = Math.floor(s / passo), fr = (s - ciclo * passo) / passo;
-    acao.time = fr * duracao; mixer.update(0);
-    boneco.position.z = pos;
-    // arco extra só no pulo que passa por cima do carro
-    var y = 0;
-    if (ciclo === 1) { var u = clamp((fr - 0.12) / (0.93 - 0.12)); y = ALTURA_ARCO * Math.pow(Math.sin(Math.PI * u), 0.55); }
-    boneco.position.y = y;
-    // some suavemente nas pontas da pista para a volta não aparecer
-    var borda = Math.min(s, distTotal - s) / (passo * 0.45);
-    var op = clamp(borda);
+  function usa(acao) {
+    aPulo.setEffectiveWeight(acao === aPulo ? 1 : 0);
+    if (aTrop) aTrop.setEffectiveWeight(acao === aTrop ? 1 : 0);
+  }
+  function opacidade(op) {
     for (var k = 0; k < mats.length; k++) {
       var mt = mats[k], tr = op < 0.999 || !!mt.userData.transpOriginal; // olhos, boca e sobrancelhas usam transparência sempre
       if (mt.transparent !== tr) { mt.transparent = tr; mt.needsUpdate = true; }
       mt.opacity = op;
     }
     boneco.visible = op > 0.01;
+  }
+  function atualizaPulo(t) {
+    if (!mixer) return;
+    var dt = Math.min(0.05, Math.max(0, (t - (ultimoT || t)) / 1000)); ultimoT = t;
+    if (reduz) { usa(aPulo); boneco.position.set(0, 0, -meioPulo); mixer.update(0); opacidade(1); return; }
+    tEst += dt * VEL;
+    var y = 0, op = 1;
+    if (estado === 'pulo') {
+      if (tEst >= durPulo) { if (aTrop) { estado = 'tropeco'; tEst = 0; } else { estado = 'caido'; tEst = 0; } }
+    } else if (estado === 'tropeco') {
+      if (tEst >= durTrop) { estado = 'caido'; tEst = 0; }
+    } else if (estado === 'caido') {
+      if (tEst >= CAIDO + SOME) { estado = 'pulo'; tEst = 0; }
+    }
+    if (estado === 'pulo') {
+      usa(aPulo); aPulo.time = Math.min(tEst, durPulo - 1e-4);
+      boneco.position.set(0, 0, -meioPulo);
+      var u = clamp((aPulo.time / durPulo - 0.12) / (0.93 - 0.12));
+      // arco de topo achatado: passa alto sobre o teto do carro
+      y = ALTURA_ARCO * Math.pow(Math.sin(Math.PI * u), 0.55);
+      op = clamp(tEst / APARECE);
+    } else {
+      var acaoFim = aTrop || aPulo;
+      usa(acaoFim);
+      acaoFim.time = estado === 'tropeco' ? tEst : (aTrop ? durTrop : durPulo) - 1e-4;
+      boneco.position.set(aTrop ? offTrop.x : 0, 0, -meioPulo + (aTrop ? offTrop.z : 0));
+      if (estado === 'caido') op = 1 - clamp((tEst - CAIDO) / SOME);
+    }
+    mixer.update(0);
+    boneco.position.y = y;
+    opacidade(op);
   }
 
   var mx = 0, my = 0, tx = 0, ty = 0;
