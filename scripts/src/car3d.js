@@ -93,7 +93,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
     loader.load(urlBoneco, function (g2) {
       boneco = g2.scene; boneco.scale.setScalar(ESC_BONECO);
       boneco.traverse(function (o) {
-        if (o.isMesh) { o.frustumCulled = false; if (o.material) { o.material.envMapIntensity = 0.8; mats.push(o.material); } }
+        if (o.isMesh) { o.frustumCulled = false; if (o.material) { o.material.envMapIntensity = 0.8; o.material.userData.transpOriginal = o.material.transparent; mats.push(o.material); } }
       });
       var clip = g2.animations[0];
       duracao = clip.duration;
@@ -132,7 +132,7 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
     var borda = Math.min(s, distTotal - s) / (passo * 0.45);
     var op = clamp(borda);
     for (var k = 0; k < mats.length; k++) {
-      var mt = mats[k], tr = op < 0.999;
+      var mt = mats[k], tr = op < 0.999 || !!mt.userData.transpOriginal; // olhos, boca e sobrancelhas usam transparência sempre
       if (mt.transparent !== tr) { mt.transparent = tr; mt.needsUpdate = true; }
       mt.opacity = op;
     }
