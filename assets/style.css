@@ -487,3 +487,21 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -.01em; margin: 0; }
 @media (max-width: 760px) {
   .hero .hero-3d { inset: auto 0 auto 0; top: calc(clamp(96px, 15vh, 150px) + 2vh); height: 52vh; }
 }
+
+/* impacto na lente: vidro rachado, clarão e estilhaços */
+.impacto { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 6; pointer-events: none; opacity: 0; }
+.impacto.ativa { animation: racha 1.6s ease-out forwards; }
+@keyframes racha { 0% { opacity: 0; } 6% { opacity: 1; } 65% { opacity: .9; } 100% { opacity: 0; } }
+.hero.tremendo .hero-sticky { animation: treme .38s cubic-bezier(.36,.07,.19,.97); }
+@keyframes treme {
+  0%,100% { transform: none; } 15% { transform: translate(-9px, 6px); } 30% { transform: translate(8px, -7px); }
+  45% { transform: translate(-6px, -4px); } 60% { transform: translate(5px, 5px); } 80% { transform: translate(-2px, 2px); }
+}
+.estilhacos { position: fixed; width: 0; height: 0; z-index: 60; pointer-events: none; }
+.estilhacos i { position: absolute; left: 0; top: 0; border-radius: 2px; opacity: 0; transform: translate(-50%, -50%);
+  box-shadow: 0 0 12px rgba(240,112,240,.7); animation: estilhaco 1.2s cubic-bezier(.15,.7,.3,1) both; }
+@keyframes estilhaco {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1.4) rotate(0); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy) + 90px)) scale(.4) rotate(var(--r)); }
+}
+@media (prefers-reduced-motion: reduce) { .impacto, .estilhacos, .hero.tremendo .hero-sticky { animation: none !important; display: none; } }
