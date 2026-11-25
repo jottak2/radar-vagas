@@ -58,15 +58,16 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
   window.addEventListener('resize', tamanho); tamanho();
 
   var pronto = false, inicio = 0;
-  // personagem que pula o carro (animação "Jumping" do Mixamo, roupa roxa)
+  // personagem que corre e pula o carro sem parar (animação "Jumping" do Mixamo, roupa roxa)
   var pulo = new THREE.Group(); palco.add(pulo);
-  var boneco = null, mixer = null, acao = null, duracao = 1, sentido = 0, pausa = 0, ultimoT = 0, eixoLongoX = true, meioPulo = 1.6;
-  var ESC_BONECO = 0.009, ALTURA_ARCO = 1.5, VEL = 0.85, DESCANSO = 0.9;
-  var urlBoneco = holder.getAttribute('data-personagem');
+  var boneco = null, mixer = null, acao = null, duracao = 1, ultimoT = 0, eixoLongoX = true;
+  var passo = 3.2, distTotal = 9.6, pos = 0, mats = [];
+  var ESC_BONECO = 0.009, ALTURA_ARCO = 1.5, VEL = 0.85;
   function posicionaPulo() {
-    // o personagem anda no seu +Z: atravessa o carro pela largura
-    pulo.rotation.y = (eixoLongoX ? 0 : Math.PI / 2) + sentido * Math.PI;
+    // a pista atravessa o carro pela largura, sempre no mesmo sentido
+    pulo.rotation.y = eixoLongoX ? 0 : Math.PI / 2;
   }
+  var urlBoneco = holder.getAttribute('data-personagem');
   var loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
   loader.load(url, function (gltf) {
     var m = gltf.scene;
@@ -91,36 +92,51 @@ import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment
   function carregaBoneco() {
     loader.load(urlBoneco, function (g2) {
       boneco = g2.scene; boneco.scale.setScalar(ESC_BONECO);
-      boneco.traverse(function (o) { if (o.isMesh) { o.frustumCulled = false; if (o.material) o.material.envMapIntensity = 0.8; } });
+      boneco.traverse(function (o) {
+        if (o.isMesh) { o.frustumCulled = false; if (o.material) { o.material.envMapIntensity = 0.8; mats.push(o.material); } }
+      });
       var clip = g2.animations[0];
-      mixer = new THREE.AnimationMixer(boneco);
-      acao = mixer.clipAction(clip); acao.setLoop(THREE.LoopOnce); acao.clampWhenFinished = true;
       duracao = clip.duration;
-      // o quadril anda ~3,5 m no clipe: centraliza o pulo no meio do carro
+      // tira o deslocamento do quadril (root motion): o avanço passa a ser contínuo, feito pelo código
       var hp = clip.tracks.filter(function (tr) { return /Hips\.position$/.test(tr.name); })[0];
-      if (hp) { var v = hp.values; meioPulo = (v[2] + v[v.length - 1]) / 2 * ESC_BONECO; }
-      boneco.position.z = -meioPulo;
+      if (hp) {
+        var v = hp.values, tt = hp.times, z0 = v[2], z1 = v[v.length - 1];
+        for (var i = 0; i < tt.length; i++) v[i * 3 + 2] -= z0 + (z1 - z0) * (tt[i] / duracao);
+        passo = (z1 - z0) * ESC_BONECO;
+      }
+      distTotal = passo * 3;
+      mixer = new THREE.AnimationMixer(boneco);
+      acao = mixer.clipAction(clip); acao.play(); acao.paused = true;
       pulo.add(boneco);
-      acao.play(); acao.paused = !!reduz;
-      if (reduz) { mixer.setTime(0); }
+      pos = reduz ? -passo * 1.1 : -distTotal / 2;
       pedir();
     });
   }
   function atualizaPulo(t) {
     if (!mixer) return;
     var dt = Math.min(0.05, Math.max(0, (t - (ultimoT || t)) / 1000)); ultimoT = t;
-    if (reduz) { mixer.update(0); pulo.position.y = 0; return; }
-    if (pausa > 0) {
-      pausa -= dt;
-      if (pausa <= 0) { sentido = 1 - sentido; posicionaPulo(); acao.reset().play(); }
-    } else {
-      mixer.update(dt * VEL);
-      if (acao.time >= duracao - 1e-3) pausa = DESCANSO;
+    if (!reduz) {
+      var vel = passo / duracao * VEL;
+      pos += vel * dt;
+      if (pos > distTotal / 2) pos -= distTotal; // sai pela frente e volta por trás, sem virar
     }
-    // arco extra para passar por cima do teto do carro
-    var u = clamp((acao.time / duracao - 0.12) / (0.93 - 0.12));
-    // arco de topo achatado: sobe rápido, fica alto sobre o teto e desce no fim
-    pulo.position.y = ALTURA_ARCO * Math.pow(Math.sin(Math.PI * u), 0.55);
+    // em que ponto do ciclo de pulo ele está (o pulo do meio fica centrado no carro)
+    var s = pos + distTotal / 2, ciclo = Math.floor(s / passo), fr = (s - ciclo * passo) / passo;
+    acao.time = fr * duracao; mixer.update(0);
+    boneco.position.z = pos;
+    // arco extra só no pulo que passa por cima do carro
+    var y = 0;
+    if (ciclo === 1) { var u = clamp((fr - 0.12) / (0.93 - 0.12)); y = ALTURA_ARCO * Math.pow(Math.sin(Math.PI * u), 0.55); }
+    boneco.position.y = y;
+    // some suavemente nas pontas da pista para a volta não aparecer
+    var borda = Math.min(s, distTotal - s) / (passo * 0.45);
+    var op = clamp(borda);
+    for (var k = 0; k < mats.length; k++) {
+      var mt = mats[k], tr = op < 0.999;
+      if (mt.transparent !== tr) { mt.transparent = tr; mt.needsUpdate = true; }
+      mt.opacity = op;
+    }
+    boneco.visible = op > 0.01;
   }
 
   var mx = 0, my = 0, tx = 0, ty = 0;
