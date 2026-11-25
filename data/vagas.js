@@ -1,6 +1,6 @@
 /* Gerado automaticamente por scripts/gerar_vagas.py. Não edite à mão. */
 window.VAGAS_DATA = {
-  "atualizadoEm": "2026-11-23T19:15:11-03:00",
+  "atualizadoEm": "2026-11-25T13:09:58-03:00",
   "planilhaUrl": "https://claude.ai/artifact/SMu9EpjfEewV5nqZhCjUuo",
   "vagas": [
     {
@@ -376,6 +376,160 @@ window.VAGAS_DATA = {
       "obs": "Mais branding que campanha.",
       "tipo": "Designer Sênior",
       "publicada": "2026-11-16"
+    },
+    {
+      "vaga": "Designer Gráfico",
+      "empresa": "Mash",
+      "local": "São Paulo – Híbrido",
+      "aderencia": "Alta",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4493940386/",
+      "obs": "Tempo integral. KVs, campanhas, social, e-commerce, OOH, PDV e CRM das marcas Mash e She; diferencial em fitness/wellness. Candidatura pelo site da empresa.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "Designer (360°)",
+      "empresa": "BTG Pactual",
+      "local": "São Paulo – modalidade não informada",
+      "aderencia": "Alta",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4493910895/",
+      "obs": "Designer 360°: CRM, e-mail marketing, redes sociais e campanhas. Exige inglês intermediário/avançado. Desejável IA no processo criativo.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "Brand Designer Jr",
+      "empresa": "InfoPrice",
+      "local": "São Paulo – Híbrido",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4492652948/",
+      "obs": "Branding + web: pede WordPress/Elementor, CSS e noções de HTML. Empresa B2B/SaaS. Nível júnior.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "AI Content Creator (Video & Graphic Design)",
+      "empresa": "Talent Global LLC",
+      "local": "Brasil – Remoto",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4489029406/",
+      "obs": "Meio período (20h/semana), contrato de longo prazo (não CLT), horário EST. Cliente americano de produtos pet (Amazon): imagem e vídeo com IA. Vaga em inglês, idioma provavelmente exigido.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "FBS – Print & Design Specialist",
+      "empresa": "Capgemini",
+      "local": "Brasil – Remoto",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4483408060/",
+      "obs": "Peças impressas e digitais para time de marketing (operação americana). Vaga em inglês, idioma exigido. Candidatura simplificada. Republicada nas últimas 24h.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "Designer",
+      "empresa": "Casa das Essências",
+      "local": "São Paulo – Presencial",
+      "aderencia": "Baixa",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4493013230/",
+      "obs": "R$ 2.300 + premiação. Social media, banners e vídeo em CapCut/Canva; nível abaixo do seu. Candidatura simplificada.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-24"
+    },
+    {
+      "vaga": "Diretor de Arte (Remoto)",
+      "empresa": "Não informada",
+      "local": "Brasil – Remoto",
+      "aderencia": "Baixa",
+      "status": "A candidatar",
+      "link": "",
+      "obs": "Post de Jhônata Pires (repassa vagas, sem ligação com a empresa). Detalhes só na imagem do post; nível e empresa não informados. Link não capturado: busque em Publicações por \"vaga diretor de arte remoto\".",
+      "tipo": "Publicação",
+      "publicada": "2026-11-23"
+    },
+    {
+      "vaga": "Analista de Design Gráfico Jr",
+      "empresa": "Dori",
+      "local": "São Paulo – Híbrido",
+      "aderencia": "Alta",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4494405650/",
+      "obs": "Nível júnior, híbrido em SP. Candidatura simplificada.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-24"
+    },
+    {
+      "vaga": "Designer Pleno",
+      "empresa": "30e",
+      "local": "São Paulo – Híbrido",
+      "aderencia": "Alta",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4494420122/",
+      "obs": "PJ. Nível pleno, híbrido em SP. Empresa de eventos e entretenimento.",
+      "tipo": "Designer Pleno",
+      "publicada": "2026-11-24"
+    },
+    {
+      "vaga": "Junior Graphic Designer",
+      "empresa": "Bring IT",
+      "local": "Brasil – Remoto",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4477913847/",
+      "obs": "Remoto, nível júnior. Vaga em inglês, idioma provavelmente exigido.",
+      "tipo": "Designer Gráfico",
+      "publicada": "2026-11-25"
+    },
+    {
+      "vaga": "Senior Graphic Designer [Presentations/Templates]",
+      "empresa": "Dentsu World Services Brazil",
+      "local": "Brasil – Remoto",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4493071162/",
+      "obs": "Foco em apresentações e templates. Exige inglês.",
+      "tipo": "Designer Sênior",
+      "publicada": "2026-11-24"
+    },
+    {
+      "vaga": "Senior Designer & Creative Strategist (Amazon & DTC)",
+      "empresa": "Remotivate",
+      "local": "Brasil – Remoto",
+      "aderencia": "Média",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4494904051/",
+      "obs": "US$ 3.000 a 5.000/mês, contrato (não CLT). Criativos para Amazon e e-commerce. Exige inglês.",
+      "tipo": "Designer Sênior",
+      "publicada": "2026-11-25"
+    },
+    {
+      "vaga": "Especialista em Criação, Conteúdo e Eventos",
+      "empresa": "Brunel (para empresa de tecnologia)",
+      "local": "São Paulo – Presencial",
+      "aderencia": "Baixa",
+      "status": "A candidatar",
+      "link": "https://www.linkedin.com/jobs/view/4494799963/",
+      "obs": "Presencial perto do metrô Santana. Mais gestão de agências e fornecedores do que criação.",
+      "tipo": "Designer Sênior",
+      "publicada": "2026-11-24"
+    },
+    {
+      "vaga": "Diretor de Arte",
+      "empresa": "MRH Seleção",
+      "local": "Não informado",
+      "aderencia": "Baixa",
+      "status": "A candidatar",
+      "link": "",
+      "obs": "Post da MRH Seleção (consultoria). Nível e local não informados. Candidatura em mrh.tweezer.jobs, vaga nº 10279.",
+      "tipo": "Publicação",
+      "publicada": "2026-11-24"
     }
   ]
 };
