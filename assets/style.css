@@ -479,12 +479,24 @@ h1, h2, h3 { font-weight: 500; letter-spacing: -.01em; margin: 0; }
   .wm b, .hero .hero-photo img, .faixa-trilho { animation: none; }
 }
 
-/* capa 3D: Thunderbird 1957 */
-.hero .hero-3d { inset: auto 0 0 0; height: 84vh; z-index: 2; pointer-events: none; }
-.hero-3d canvas { display: block; width: 100% !important; height: 100% !important; opacity: 0; transition: opacity 1s ease; }
-.hero-3d.carregado canvas { opacity: 1; }
-.hero-3d.sem-3d { display: none; }
-@media (max-width: 760px) {
-  .hero .hero-3d { inset: auto 0 auto 0; top: calc(clamp(96px, 15vh, 150px) + 2vh); height: 52vh; }
-}
 
+/* capa: foto em camadas com parallax (fundo do vagão, nome, jogador) */
+.hero .hero-grid, .hero .hero-arc, .hero .hero-fog { display: none; }
+.capa-fundo { position: absolute; inset: -4%; z-index: -4; pointer-events: none; will-change: transform; }
+.capa-fundo img { width: 100%; height: 100%; object-fit: cover; object-position: 38% 50%; filter: brightness(.62) saturate(1.1) blur(1.5px); }
+.capa-fundo::after {
+  content: ""; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(8,6,13,.85) 0%, rgba(8,6,13,.15) 30%, rgba(8,6,13,.1) 55%, rgba(8,6,13,.92) 100%),
+              radial-gradient(120% 80% at 50% 45%, transparent 40%, rgba(8,6,13,.55) 100%);
+}
+.hero .capa-jogador { inset: -4%; height: auto; z-index: 2; transform-origin: 38% 60%; }
+.hero .capa-jogador img { width: 100%; height: 100%; object-fit: cover; object-position: 38% 50%;
+  animation: entra 1.4s .1s cubic-bezier(.2,.8,.2,1) both; filter: drop-shadow(0 30px 40px rgba(0,0,0,.55)); }
+.capa-jogador .camada, .capa-fundo .camada { will-change: transform; }
+@keyframes entra { from { transform: translateY(6%) scale(1.04); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (max-width: 900px) {
+  .hero .capa-jogador { inset: -4%; top: -4%; height: auto; }
+  .capa-fundo img, .hero .capa-jogador img { object-position: 30% 50%; }
+}
+@media (prefers-reduced-motion: reduce) { .hero .capa-jogador img { animation: none; } }
+.hero .hero-nomes { z-index: 3; }
